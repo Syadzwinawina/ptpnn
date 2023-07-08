@@ -19,6 +19,8 @@ import Ptpn from './ptpn.png';
 import Rumah from './rumah.png';
 import RumahAktif from './rumahAktif.png';
 import UI from './ui.png';
+import orang from './orang.png';
+import tabel from './tabel.png';
 
 export {
     Akhlak,
@@ -42,4 +44,6 @@ export {
     Rumah,
     RumahAktif,
     UI,
+    orang,
+    tabel
 };

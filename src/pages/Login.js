@@ -10,10 +10,6 @@ export default function Login({navigation}) {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  // const login = useCallback(async()=>{
-  //     const res = await axios.post('http://192.168.1.14:105/login');
-  //     console.log('data',res?.data)
-  // },[])
 
   const login = useCallback(async () => {
     try {
@@ -25,7 +21,9 @@ export default function Login({navigation}) {
 
       // cek jika login berhasil
       if (response?.data?.message === 'Login berhasil!') {
-        navigation.navigate('MenuSatu'); // Ganti 'Beranda' dengan nama halaman beranda Anda
+
+        navigation.navigate('Dashboard_A');
+
       } else {
         setErrorMessage('User_id atau Password salah'); // Set error message for incorrect password
       }

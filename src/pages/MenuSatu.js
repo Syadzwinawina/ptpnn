@@ -4,13 +4,12 @@ import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 
 const MenuSatu = () => {
-  
 
   return (
     <>
-      <Header />
+      <Header userId={userData.user_id} />
       <View style={styles.wrapper}>
-        <Text style={styles.text}>Dashboard</Text>
+        <Text style={styles.text}>Dashboard </Text>
         <Image
           source={require('../../src/assets/images/cpo.jpg')}
           style={styles.image}
@@ -26,8 +25,8 @@ export default MenuSatu;
 const styles = StyleSheet.create({
   wrapper: {
     paddingHorizontal: 27,
-    flex:1,
-     },
+    flex: 1,
+  },
   text: {
     textAlign: 'center',
     padding: 30,
@@ -39,17 +38,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    // justifyContent: 'space-around',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#f2f2f2',
-    // height: 50,
   },
-
   image: {
     width: 350,
     height: 300,
     alignItems: 'center',
-    // marginBottom: 20,
   },
 });

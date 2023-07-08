@@ -8,6 +8,7 @@ import Input from "./Input";
 import MainHeader from "./MainHeader";
 import NavButton from "./NavButton";
 import NavBar from "./NavBar";
+import NavBarA from "./NavBarA";
 
 export {
     Button,
@@ -20,4 +21,5 @@ export {
     MainHeader,
     NavButton,
     NavBar,
+    NavBarA,
 }

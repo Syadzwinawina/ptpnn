@@ -10,6 +10,7 @@ import ex from '../../assets/images/ic-exit.png';
 import {useNavigation} from '@react-navigation/native';
 
 const Header = () => {
+
   const navigation = useNavigation();
   const [off, setOff] = useState(true);
   return (
