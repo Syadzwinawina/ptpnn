@@ -26,6 +26,12 @@ import Download_R_A from '../pages/Download_R_A.js';
 import Download_R from '../pages/Download_R.js';
 import Download_S from '../pages/Download_S.js';
 import Hapus_R_A from '../pages/Hapus_R_A.js';
+import { AuthContext } from '../pages/AuthContext.js';
+import Riwayat_R from '../pages/Riwayat_R.js';
+import DW_S from '../pages/DW_S.js';
+import DW_R from '../pages/DW_R.js';
+
+
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -173,6 +179,27 @@ const Router = () => {
         component={Edit_Akun}
         options={{headerShown: false}}
       />
+      <Stack.Screen
+        name="AuthContext"
+        component={AuthContext}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Riwayat_R"
+        component={Riwayat_R}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="DW_S"
+        component={DW_S}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="DW_R"
+        component={DW_R}
+        options={{headerShown: false}}
+      />
+
     </Stack.Navigator>
   );
 };

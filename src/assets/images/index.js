@@ -21,6 +21,7 @@ import RumahAktif from './rumahAktif.png';
 import UI from './ui.png';
 import orang from './orang.png';
 import tabel from './tabel.png';
+import dw from './dw.png';
 
 export {
     Akhlak,
@@ -45,5 +46,6 @@ export {
     RumahAktif,
     UI,
     orang,
-    tabel
+    tabel,
+    dw
 };

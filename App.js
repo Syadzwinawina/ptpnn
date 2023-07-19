@@ -33,21 +33,32 @@
 
 
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import { StyleSheet, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import Router from './src/router';
-// import {AuthProvider} from './src/context/AuthContext';
+import { UserProvider } from './src/pages/User_Context';
+import { AuthStack } from './src/components';
+import { AuthProvider } from './src/pages/AuthContext';
+import Login from './src/pages/Login';
+import Profile from './src/pages/Profile';
+
+
 
 const App = () => {
   return (
-    // <AuthProvider>
+    <AuthProvider>
       <NavigationContainer>
         <Router />
       </NavigationContainer>
-    // </AuthProvider>
+    </AuthProvider>
   );
 };
+    
 
 export default App;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

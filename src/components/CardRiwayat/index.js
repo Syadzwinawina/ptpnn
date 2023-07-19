@@ -1,14 +1,19 @@
-import {StyleSheet, Text, View} from 'react-native';
+
+
+
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 
-export default function CardRiwayat({detail, name, time}) {
+export default function CardRiwayat({ id, waktu, nama, hasil }) {
+
+  console.log("HASIL:::",hasil)
   return (
-    <View style={styles.wrapper}>
+    <View style={styles.wrapper} key={id}>
       <View style={styles.inner}>
-        <Text style={styles.textUp}>{detail}</Text>
+        <Text style={styles.textUp}>{waktu}</Text>
         <View style={styles.content}>
-          <Text style={styles.text}>{name}</Text>
-          <Text style={styles.text}>{time}</Text>
+          <Text style={styles.text}>{nama}</Text>
+          <Text style={styles.text}>{hasil}</Text>
         </View>
       </View>
     </View>

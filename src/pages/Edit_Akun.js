@@ -17,6 +17,10 @@ const Edit_Akun = ({ route }) => {
   const [jabatan, setJabatan] = useState('');
 
   useEffect(() => {
+    loadUserData(); // Memuat data pengguna saat komponen dimuat
+  }, []);
+
+  const loadUserData = () => {
     if (route.params && route.params.user) {
       const { user } = route.params;
       setNama(user.nama);
@@ -25,7 +29,7 @@ const Edit_Akun = ({ route }) => {
       setPassword(user.password);
       setJabatan(user.jabatan);
     }
-  }, [route.params]);
+  };
 
   const handleSimpanPerubahan = () => {
     const data = {
@@ -37,7 +41,7 @@ const Edit_Akun = ({ route }) => {
     };
 
     axios
-      .post('http://10.0.2.2:105/edit_pengguna', data)
+      .put(`http://10.0.2.2:105/edit-akun/${user_id}`, data)
       .then((response) => {
         console.log(response.data.message);
         navigate.push('Akun_A');

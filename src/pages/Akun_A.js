@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import Header from '../components/Header';
 import NavBarA from '../components/NavBarA';
 import Button from '../components/Button';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from './AuthContext';
 
 const Akun_A = () => {
   const navigation = useNavigation();
   const [tableData, setTableData] = useState([]);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const {user} = useContext(AuthContext);
+
 
   const fetchData = () => {
     axios
@@ -25,7 +26,12 @@ const Akun_A = () => {
       });
   };
 
-  const handleDelete = (data) => {
+
+  useEffect(()=>{
+    fetchData()
+  },[fetchData])
+
+  const handleDelete = (user_id) => {
     Alert.alert(
       'Konfirmasi',
       'Apakah Anda ingin menghapus data ini?',
@@ -37,11 +43,8 @@ const Akun_A = () => {
         {
           text: 'Ya',
           onPress: () => {
-            const requestData = {
-              user_id: data.user_id,
-            };
             axios
-              .post('http://10.0.2.2:105/hapus_pengguna', requestData)
+              .delete(`http://10.0.2.2:105/hapus_pengguna`, { data: { user_id: user_id } })
               .then((response) => {
                 console.log(response.data.message);
                 fetchData(); // Memperbarui data setelah penghapusan berhasil
@@ -58,7 +61,7 @@ const Akun_A = () => {
 
   return (
     <>
-      <Header />
+      <Header name={user?.data[2]} />
       <View style={styles.wrapper}>
         <Text style={styles.text}>Daftar Akun Pengguna</Text>
         <View style={styles.btn}>
@@ -79,15 +82,10 @@ const Akun_A = () => {
             {tableData.map((data, index) => (
               <View key={index} style={styles.tableRow}>
                 <Text style={styles.tableCell}>{data.Nama}</Text>
-                <Text style={styles.tableCell}>{data.Nik}</Text>
+                <Text style={styles.tableCell}>{data.NIK}</Text>
                 <Text style={styles.tableCell}>{data.Password}</Text>
                 <View style={styles.tableCell}>
-                  <TouchableOpacity
-                    onPress={() => navigation.push('Edit_Akun', { user: data })}
-                  >
-                    <Text style={styles.actionButton}>Edit</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => handleDelete(data)}>
+                  <TouchableOpacity onPress={() => handleDelete(data.user_id)}>
                     <Text style={styles.actionButton}>Hapus</Text>
                   </TouchableOpacity>
                 </View>

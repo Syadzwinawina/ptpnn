@@ -3,7 +3,7 @@ import React from 'react';
 import Button from '../Button';
 import { useNavigation } from '@react-navigation/native';
 
-const CardCounterR = () => {
+const CardCounterR = ({hasil,cpo,tbs,data}) => {
     const navigation = useNavigation();
     return (
         <>
@@ -11,14 +11,14 @@ const CardCounterR = () => {
                 <View style={styles.row}>
                     <Text style={styles.label}>CPO</Text>
                     <View style={styles.valueWrapper}>
-                        <Text style={styles.value}>         90698 Kg</Text>
+                        <Text style={styles.value}>         {cpo} Kg</Text>
                     </View>
                 </View>
                 <View style={styles.line} />
                 <View style={styles.row}>
                     <Text style={styles.label}>TBS Olah</Text>
                     <View style={styles.valueWrapper}>
-                        <Text style={styles.value}>500000 Kg</Text>
+                        <Text style={styles.value}>{tbs} Kg</Text>
                     </View>
                 </View>
                 <View style={styles.wrapContent} />
@@ -28,15 +28,15 @@ const CardCounterR = () => {
             <Text style={styles.label}>Hasil</Text>
             <View style={styles.wrapper}>
                 <View style={styles.row}>
-                    <Text style={styles.value}>18.20%</Text>
+                    <Text style={styles.value}>{hasil}%</Text>
                 </View>
                 <View style={styles.wrapContent} />
             </View>
 
-            <View style={styles.btn}>
-            <Button label="Simpan" width={136} onPress={() => navigation.push('Riwayat')}/>
-            <Button label="Cancel" width={136} onPress={() => navigation.push('MenuSatu')} />
-            </View>
+            {/* <View style={styles.btn}>
+            <Button label="Simpan" width={136} onPress={() => navigation.push('Riwayat_R',{"data":data})}/>
+            <Button label="Cancel" width={136} onPress={() => navigation.push('Rendemen')} />
+            </View> */}
             <View>
                 <Button label="Keluar" onPress={() => navigation.push('MenuSatu')} />
             </View>

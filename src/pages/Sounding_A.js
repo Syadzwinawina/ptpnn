@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Header from '../components/Header';
 import NavBarA from '../components/NavBarA';
 import Button from '../components/Button';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from './AuthContext';
 
 const Sounding_A = () => {
   const navigation = useNavigation();
   const [tableData, setTableData] = useState([]);
+  const {user} = useContext(AuthContext)
+
 
   useEffect(() => {
     fetchData();
 
-    const interval = setInterval(fetchData, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
+  }, [fetchData]);
 
   const fetchData = () => {
     axios
@@ -31,7 +32,7 @@ const Sounding_A = () => {
 
   return (
     <>
-      <Header />
+      <Header name={user?.data[2]} />
       <View style={styles.wrapper}>
         <Text style={styles.text}>Hasil Sounding</Text>
         <View style={styles.btn}>
@@ -45,6 +46,7 @@ const Sounding_A = () => {
               <Text style={styles.tableHeader}>Nama</Text>
               <Text style={styles.tableHeader}>Tangki</Text>
               <Text style={styles.tableHeader}>Suhu</Text>
+              <Text style={styles.tableHeader}>Tinggi</Text>
               <Text style={styles.tableHeader}>Volume</Text>
               <Text style={styles.tableHeader}>Hasil Sounding</Text>
             </View>

@@ -1,77 +1,42 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import NavManager from '../NavManager';
+import NavAsisten from '../NavAsisten';
+import NavPetugasTangki from '../NavPetugasTangki';
+import NavBarA from '../NavBarA';
+import { AuthContext } from '../../pages/AuthContext';
 
 const NavBar = ({ activePage }) => {
   const navigation = useNavigation();
+  const {user} = useContext(AuthContext);
+
 
   return (
     <View style={styles.navbar}>
-      <TouchableOpacity
-        style={[
-          styles.navbarItem,
-          activePage === 'MenuSatu' && styles.activeNavbarItem,
-        ]}
-        onPress={() => {
-  
-          navigation.navigate('MenuSatu');
-        }}
-      >
-        <Image
-          source={require('../../assets/images/rumahAktif.png')}
-          style={styles.navbarIcon}
-        />
-        <Text style={styles.navbarItemText}>Home</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[
-          styles.navbarItem,
-          activePage === 'Beranda' && styles.activeNavbarItem,
-        ]}
-        onPress={() => {
-                  navigation.navigate('Beranda');
-        }}
-      >
-        <Image
-          source={require('../../assets/images/minyakAktif.png')}
-          style={styles.navbarIcon}
-        />
-        <Text style={styles.navbarItemText}>Sounding</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[
-          styles.navbarItem,
-          activePage === 'Rendemen' && styles.activeNavbarItem,
-        ]}
-        onPress={() => {
-        
-          navigation.navigate('Rendemen');
-        }}
-      >
-        <Image
-          source={require('../../assets/images/persenAktif.png')}
-          style={styles.navbarIcon}
-        />
-        <Text style={styles.navbarItemText}>Rendemen</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[
-          styles.navbarItem,
-          activePage === 'GrafikH' && styles.activeNavbarItem,
-        ]}
-        onPress={() => {
-                  navigation.navigate('GrafikH');
-        }}
-      >
-        <Image
-          source={require('../../assets/images/grafikAktif.png')}
-          style={styles.navbarIcon}
-        />
-        <Text style={styles.navbarItemText}>Grafik</Text>
-      </TouchableOpacity>
+      {
+        user?.data[5] ==="Manajer" || user?.data[5] === "Masinis Kepala" ? (
+          <NavManager activePage={activePage}/>
+        ) : null
+      }
+      {
+        user?.data[5] === "Asisten Pengolahan" ? (
+          <NavAsisten activePage={activePage}/>
+        ): null
+      }
+      {
+        user?.data[5] === "Petugas Tangki" ? (
+          <NavPetugasTangki activePage={activePage}/>
+        ):null
+      }
+      {
+      user?.data[5] === "Kerani CPO" ? (
+          <NavBarA activePage={activePage}/>
+        ):null
+      }
+    
+      
     </View>
   );
 };

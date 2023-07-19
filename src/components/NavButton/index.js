@@ -17,6 +17,7 @@ export default NavButton;
 
 const styles = StyleSheet.create({
   wrapper: {
+    zIndex:20,
     alignItems: 'center',
     paddingHorizontal: 10,
     paddingVertical: 10,

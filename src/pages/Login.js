@@ -1,15 +1,39 @@
-import React, {useCallback, useState} from 'react';
-import {View, Text, Image, StyleSheet} from 'react-native';
+import React, { useCallback, useState, useEffect, useContext } from 'react';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import Gap from '../components/Gap';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { AuthContext } from './AuthContext';
+import { useNavigation } from '@react-navigation/native';
 
-export default function Login({navigation}) {
+export default function Login() {
+  const navigation = useNavigation();
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
+  const {setUser,user} = useContext(AuthContext)
+
+  // useEffect(() => {
+  //   checkPreviousLogin();
+  // }, []);
+
+  // const checkPreviousLogin = useCallback(async () => {
+  //   try {
+  //     const savedUser = await AsyncStorage.getItem('user');
+  //     console.log("SAVED:::",savedUser)
+  //     setUser(savedUser)
+
+   
+  //     if (savedUser) {
+  //         navigation.navigate('Dashoard_A')
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }, []);
 
   const login = useCallback(async () => {
     try {
@@ -17,15 +41,25 @@ export default function Login({navigation}) {
         user_id: userId,
         password: password,
       });
-      console.log('data', response?.data);
+      
+      console.log('data:::::', response?.data);
+      
+      if (response?.data?.error === 'false') {
+        await AsyncStorage.setItem('user', JSON.stringify(response?.data));
+        //  await AsyncStorage.setItem('user', JSON.stringify(response));
+        const dataUser = await AsyncStorage.getItem('user');
+        setUser(JSON.parse(dataUser))
 
-      // cek jika login berhasil
-      if (response?.data?.message === 'Login berhasil!') {
-
+        // console.log(dataUser?.data[5] ,"THAT USER:::")
+        if(response?.data[5] === "Kerani CPO"){
         navigation.navigate('Dashboard_A');
+      }else{
+        navigation.navigate('MenuSatu');
 
+      }
+        // navigation.navigate('MenuSatu');
       } else {
-        setErrorMessage('User_id atau Password salah'); // Set error message for incorrect password
+        setErrorMessage('User_id atau Password salah');
       }
     } catch (error) {
       console.error(error);

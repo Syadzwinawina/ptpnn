@@ -1,91 +1,68 @@
-// import { StyleSheet, View, Text, Button } from 'react-native';
+// import { StyleSheet, View, Text, Button, ScrollView } from 'react-native';
 // import React, { useEffect, useState } from 'react';
 // import MainHeader from '../components/MainHeader';
 // import CardRiwayat from '../components/CardRiwayat';
-// import  Button  from '../components/Button';
+// import CustomButton from '../components/Button';
 // import { useNavigation } from '@react-navigation/native';
-// import {useRoute} from '@react-navigation/native';
 // import axios from 'axios';
-// import { ScrollView } from 'react-native-gesture-handler';
+// import dw from '../assets/images/index'
 
-
-
-// const Riwayat = () => {
+// const Riwayat_R = ({onPress}) => {
 //   const navigation = useNavigation();
 //   const [tableData, setTableData] = useState([]);
 
-//   console.log(tableData)
-  
-//   const [open, setOpen] = useState(false);
-//   const [value, setValue] = useState(null);
-//   const [isBarChartVisible, setIsBarChartVisible] = useState(true); // Define isBarChartVisible state
+//   console.log(tableData);
 
-//   const toggleChartType = () => {
-//     setIsBarChartVisible(!isBarChartVisible); // Toggle the value of isBarChartVisible
-//   };
-  
 //   const fetchData = () => {
 //     axios
-//       .get('http://10.0.2.2:105/tampilkan_data_sounding')
+//       .get('http://10.0.2.2:105/tampilkan_data_rendemen')
 //       .then((response) => {
-//         setTableData(response.data.data_sounding);
+//         setTableData(response.data.data_rendemen);
 //       })
 //       .catch((error) => {
 //         console.error(error);
 //       });
 //   };
 
-//   useEffect(()=>{
-//     fetchData()
-//   },[])
+//   useEffect(() => {
+//     fetchData();
+//   }, []);
 
 //   return (
 //     <>
-//       <MainHeader label="Riwayat" onPress={() => navigation.goBack()} />
+//       <MainHeader label="Riwayat Rendemen" onPress={() => navigation.goBack()} />
 //       <ScrollView style={styles.wrapper}>
 //         <Text style={styles.label}>Riwayat :</Text>
 //         <View style={styles.btn}>
-//           <Button label="Sounding" width={136} onPress={() => navigation.push('Riwayat')} />
-//           <Button label="Rendemen" width={136} onPress={() => navigation.push('MenuSatu')} />
+//           <CustomButton label="Sounding" width={136} onPress={() => navigation.push('Riwayat')} />
+//           <CustomButton label="Rendemen" width={136} onPress={() => navigation.push('Riwayat_R')} />
 //         </View>
+//         <TouchableOpacity onPress={() => navigation.push('Download_S')}>
+//         <Image source={dw} style={styles.dw} />
+//       </TouchableOpacity>
 
-//        {tableData?.map((item,index)=>{
-//         return (
-//           <CardRiwayat
-//           key={item?.id}
-//           waktu={item?.Waktu}
-//           nama={item?.Nama}
-
-//           hasil={item?.hasil}
-
-//         />
-//         )
-//        })}
-       
+//         {tableData.map((item, index) => {
+//           return (
+//             <CardRiwayat
+//               key={item.id}
+//               waktu={item.Waktu}
+//               nama={item.Nama}
+//               hasil={item.hasil}
+//             />
+//           );
+//         })}
 //       </ScrollView>
 //     </>
 //   );
 // };
 
-// export default Riwayat;
+// export default Riwayat_R;
 
 // const styles = StyleSheet.create({
 //   wrapper: {
 //     padding: 30,
-//     marginBottom:50,
-//     paddingBottom:50,
-//   },
-//   text: {
-//     padding: 30,
-//     marginTop: 23,
-//     fontSize: 20,
-//     color: '#000000',
-//     fontWeight: 'bold',
-//   },
-//   picker: {
-//     backgroundColor: '#E5E5E5',
-//     borderColor: '#E5E5E5',
-//     borderRadius: 10,
+//     marginBottom: 50,
+//     paddingBottom: 50,
 //   },
 //   label: {
 //     marginBottom: 5,
@@ -93,6 +70,11 @@
 //     lineHeight: 18,
 //     color: 'black',
 //     fontWeight: 'bold',
+//   },
+//   dw: {
+//     marginRight: 15,
+//     width: 24,
+//     height: 24,
 //   },
 //   btn: {
 //     marginBottom: 15,
@@ -102,7 +84,7 @@
 // });
 
 
-import { StyleSheet, View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import MainHeader from '../components/MainHeader';
 import CardRiwayat from '../components/CardRiwayat';
@@ -112,19 +94,22 @@ import axios from 'axios';
 import dw from '../assets/images/dw.png';
 import { AuthContext } from './AuthContext';
 
-const Riwayat = () => {
-  const navigation = useNavigation();
-  const [tableData, setTableData] = useState([]);
+const Riwayat_R = ({ onPress }) => {
   const {user} = useContext(AuthContext);
 
 
-  console.log(tableData);
+  console.log(user)
+
+  const navigation = useNavigation();
+  const [tableData, setTableData] = useState([]);
+
+  console.log("TABLE DATA::::",tableData);
 
   const fetchData = () => {
     axios
-      .get('http://10.0.2.2:105/tampilkan_data_sounding')
+      .get('http://10.0.2.2:105/tampilkan_data_rendemen')
       .then((response) => {
-        setTableData(response.data.data_sounding);
+        setTableData(response.data.data_rendemen);
       })
       .catch((error) => {
         console.error(error);
@@ -137,7 +122,7 @@ const Riwayat = () => {
 
   return (
     <>
-      <MainHeader label="Riwayat Sounding" onPress={() => navigation.push('MenuSatu')} />
+      <MainHeader label="Riwayat Rendemen" onPress={() => navigation.push('MenuSatu')} />
       <ScrollView style={styles.wrapper}>
         <Text style={styles.label}>Riwayat :</Text>
         <View style={styles.btn}>
@@ -150,7 +135,7 @@ const Riwayat = () => {
         </View>
         {
           user?.data[5] !== "Petugas Tangki" && (
-            <TouchableOpacity onPress={() => navigation.push('DW_S')} style={styles.iconContainer}>
+            <TouchableOpacity onPress={() => navigation.push('DW_R')} style={styles.iconContainer}>
           <View style={styles.iconWrapper}>
             <Image source={dw} style={styles.dw} />
           </View>
@@ -161,7 +146,7 @@ const Riwayat = () => {
         {tableData.map((item, index) => {
           return (
             <CardRiwayat
-              key={item.id}
+              key={item.id && item.id.toString()} // Tambahkan key prop di sini dengan nilai yang unik
               waktu={item.Waktu}
               nama={item.Nama}
               hasil={item.hasil}
@@ -173,7 +158,7 @@ const Riwayat = () => {
   );
 };
 
-export default Riwayat;
+export default Riwayat_R;
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -196,8 +181,14 @@ const styles = StyleSheet.create({
   iconContainer: {
     alignItems: 'flex-end',
   },
+  iconWrapper: {
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 15,
+  },
   dw: {
-    marginLeft: 15,
     width: 24,
     height: 24,
   },

@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Header from '../components/Header';
 import NavBarA from '../components/NavBarA';
 import Button from '../components/Button';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from './AuthContext';
 
 const Rendemen_A = () => {
   const navigation = useNavigation();
   const [tableData, setTableData] = useState([]);
+  const {user} = useContext(AuthContext)
+
 
   useEffect(() => {
     fetchData();
 
-    const interval = setInterval(fetchData, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
+  }, [ fetchData]);
 
   const fetchData = () => {
     axios
@@ -31,7 +32,7 @@ const Rendemen_A = () => {
 
   return (
     <>
-      <Header />
+      <Header name={user?.data[2]} />
       <View style={styles.wrapper}>
         <Text style={styles.text}>Hasil Rendemen</Text>
         <View style={styles.btn}>
@@ -85,15 +86,8 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontWeight: 'bold',
   },
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f2f2f2',
-  },
   btn: {
-    marginBottom: 32,
+    marginBottom: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

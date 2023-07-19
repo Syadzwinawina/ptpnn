@@ -9,6 +9,7 @@ import MainHeader from "./MainHeader";
 import NavButton from "./NavButton";
 import NavBar from "./NavBar";
 import NavBarA from "./NavBarA";
+import AuthStack from "./AuthStack"
 
 export {
     Button,
@@ -22,4 +23,5 @@ export {
     NavButton,
     NavBar,
     NavBarA,
+    AuthStack,
 }

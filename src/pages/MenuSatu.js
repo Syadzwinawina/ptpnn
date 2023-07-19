@@ -1,13 +1,23 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from './AuthContext';
 
 const MenuSatu = () => {
 
+  const {user} = useContext(AuthContext); 
+  // const [isBarChartVisible, setIsBarChartVisible] = useState(true);
+
+  // const toggleChartType = () => {
+  //   setIsBarChartVisible(!isBarChartVisible);
+  // };
+
   return (
     <>
-      <Header userId={userData.user_id} />
+      <Header name={user?.data[2]}
+      />
       <View style={styles.wrapper}>
         <Text style={styles.text}>Dashboard </Text>
         <Image

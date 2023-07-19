@@ -2,14 +2,19 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Header from '../components/Header';
 import CardCounter from '../components/CardCounter';
+import {useRoute} from '@react-navigation/native';
 
 const Output = () => {
+  const route = useRoute();
+  const {data} = route.params;
+  console.log(data)
+  
   return (
     <>
       <Header />
       <View style={styles.wrapper}>
         <Text style={styles.text}>Hasil Nilai Pengukuran</Text>
-        <CardCounter />
+        <CardCounter volume={data?.volume} suhu={data?.suhu} hasil={data?.hasil}data={data} />
       </View>
     </>
   );

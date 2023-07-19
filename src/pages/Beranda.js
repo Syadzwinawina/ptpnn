@@ -1,58 +1,107 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
-// import Header from '../components/Header';
-// import Input from '../components/Input';
-import { Gap, Header, Input } from '../components';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import Button from '../components/Button';
-import NavBar from '../components/NavBar';
-// import SelectDropdown from 'react-native-select-dropdown';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { Header, Input, Gap, Button, NavBar } from '../components';
+import { AuthContext } from './AuthContext';
 
-export default function Beranda({navigation}) {
+export default function Beranda({ navigation }) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [selectedValue, setSelectedValue] = useState('');
+  const [tinggi, setTinggi] = useState('');
+  const [suhu, setSuhu] = useState('');
+  const [beda, setBeda] = useState('');
+  const [meja, setMeja] = useState('');
   const [items, setItems] = useState([
-    {label: 'Tangki CPO 1', value: 'Tangki CPO 1'},
-    {label: 'Tangki CPO 2', value: 'Tangki CPO 2'},
-
+    { label: 'Tangki CPO 1', value: 'cpo1' },
+    { label: 'Tangki CPO 2', value: 'cpo2' },
   ]);
+
+
+  const handleCount = useCallback(async () => {
+    try {
+      const res = await axios.post('http://10.0.2.2:105/sounding', {
+        nama: user?.data[2].toString(),
+        tangki: selectedValue, // Gunakan selectedValue untuk mengirim nilai tangki yang dipilih
+        tinggi: tinggi,
+        suhu: suhu,
+        beda: beda,
+        meja: meja,
+      });
+
+      console.log('hasil', res?.data);
+      if (res?.data?.error === 'false') {
+        navigation.navigate('Output', { data: res?.data });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [beda, items, meja, navigation, suhu, tinggi, user]);
+
+ const {user} = useContext(AuthContext)
+
   return (
     <>
-      <Header />
+      <Header name={user?.data[2]} />
       <Text style={styles.text}>Pemasukan Nilai Pengukuran</Text>
-      <View style={styles.wrapper}>
-        <Input label="Tinggi :" height={30} labelOn />
-        <Gap height={15} />
-        <Input label="Suhu :" height={30} labelOn />
-        <Gap height={15} />
-        <Input label="Beda :" height={30} labelOn />
-        <Gap height={15} />
-        <Input label="Meja :" height={30} labelOn />
-        <Gap height={15} />
-        <Text style={styles.label}>Tangki :</Text>
-        <DropDownPicker
+      <View style={styles.container}>
+        <View style={styles.wrapper}>
+          <Input
+            label="Tinggi :"
+            height={30}
+            labelOn
+            onChangeText={(text) => setTinggi(text)}
+          />
+          <Gap height={15} />
+          <Input
+            label="Suhu :"
+            height={30}
+            labelOn
+            onChangeText={(text) => setSuhu(text)}
+          />
+          <Gap height={15} />
+          <Input
+            label="Beda :"
+            height={30}
+            labelOn
+            onChangeText={(text) => setBeda(text)}
+          />
+          <Gap height={15} />
+          <Input
+            label="Meja :"
+            height={30}
+            labelOn
+            onChangeText={(text) => setMeja(text)}
+          />
+          <Gap height={15} />
+          <Text style={styles.label}>Tangki :</Text>
+          <DropDownPicker
           style={styles.picker}
           placeholder="Pilih Tangki"
           open={open}
-          value={value}
+          value={selectedValue}
           items={items}
           setOpen={setOpen}
-          setValue={setValue}
+          setValue={setSelectedValue}
           setItems={setItems}
-        />
-        <Gap height={55} />
-        <Button label="Hitung" onPress={() => navigation.navigate('Output')} />
-        <NavBar activePage="Beranda"/>
+          onValueChange={(value) => setSelectedValue(value)}
+/>
+          <Gap height={55} />
+          <Button label="Hitung" onPress={handleCount} />
+        </View>
       </View>
+      <NavBar activePage="Beranda" />
     </>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   wrapper: {
-    position:'relative',
     padding: 30,
-    flex:1,
   },
   text: {
     padding: 30,

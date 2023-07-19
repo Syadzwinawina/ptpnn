@@ -1,33 +1,44 @@
-import {StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import Gap from '../Gap';
 import Button from '../Button';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
-const CardCounter = () => {
+const CardCounter = ({ hasil, volume, suhu, data }) => {
   const navigation = useNavigation();
+
+  const saveData = async () => {
+    try {
+      await axios.post('http://10.0.2.2:105/sounding', data);
+      // Tambahkan logika lain yang diperlukan setelah penyimpanan data berhasil
+      navigation.push('Riwayat', { data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <View style={styles.wrapper}>
-        <Text style={styles.username}>Username</Text>
-        <Text style={styles.username}>419336 Kg</Text>
+        <Text style={styles.username}>{hasil} Kg</Text>
         <View style={styles.wrapContent}>
           <View>
-            <Text style={styles.innerCard}>Tinggi</Text>
             <Gap height={5} />
-            <Text style={styles.innerCard}>5000 Cm</Text>
+            <Text style={styles.username}>Volume</Text>
+            <Text style={styles.innerCard}>{volume} Cm</Text>
           </View>
           <View>
             <Text style={styles.innerCard}>Suhu</Text>
             <Gap height={5} />
-            <Text style={styles.innerCard}>32 °C</Text>
+            <Text style={styles.innerCard}>{suhu} °C</Text>
           </View>
         </View>
       </View>
-      <View style={styles.btn}>
-        <Button label="Simpan" width={136} onPress={() => navigation.push('Riwayat')}/>
+      {/* <View style={styles.btn}>
+        <Button label="Simpan" width={136} onPress={saveData} />
         <Button label="Cancel" width={136} onPress={() => navigation.push('MenuSatu')} />
-      </View>
+      </View> */}
       <View>
         <Button label="Keluar" onPress={() => navigation.push('MenuSatu')} />
       </View>
