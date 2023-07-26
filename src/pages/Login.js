@@ -42,7 +42,7 @@ export default function Login() {
         password: password,
       });
       
-      console.log('data:::::', response?.data);
+      console.log('data:::::', response?.data?.data);
       
       if (response?.data?.error === 'false') {
         await AsyncStorage.setItem('user', JSON.stringify(response?.data));
@@ -51,8 +51,8 @@ export default function Login() {
         setUser(JSON.parse(dataUser))
 
         // console.log(dataUser?.data[5] ,"THAT USER:::")
-        if(response?.data[5] === "Kerani CPO"){
-        navigation.navigate('Dashboard_A');
+        if(response?.data?.data[5] === "Kerani CPO"){
+        navigation.replace('Dashboard_A');
       }else{
         navigation.navigate('MenuSatu');
 

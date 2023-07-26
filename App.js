@@ -46,11 +46,11 @@ import Profile from './src/pages/Profile';
 
 const App = () => {
   return (
-    <AuthProvider>
       <NavigationContainer>
+        <AuthProvider>
         <Router />
+        </AuthProvider>
       </NavigationContainer>
-    </AuthProvider>
   );
 };
     

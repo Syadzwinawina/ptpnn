@@ -1,35 +1,60 @@
+
+
+
 // import React, { useContext, useEffect, useState } from 'react';
 // import { View, StyleSheet, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 // import axios from 'axios';
 // import { LineChart } from 'react-native-chart-kit';
+// import DropDownPicker from 'react-native-dropdown-picker'; // Import DropDownPicker
 // import Header from '../components/Header';
 // import NavBar from '../components/NavBar';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 // import { AuthContext } from './AuthContext';
 
 // const GrafikH = () => {
-//   const {user} = useContext(AuthContext);
+//   const { user } = useContext(AuthContext);
+
+//   const [items, setItems] = useState([
+//     { label: '1', value: '1' },
+//     { label: '2', value: '2' },
+//     { label: '3', value: '3' },
+//     { label: '4', value: '4' },
+//     { label: '5', value: '5' },
+//     { label: '6', value: '6' },
+//     { label: '7', value: '7' },
+//     { label: '8', value: '8' },
+//     { label: '9', value: '9' },
+//     { label: '10', value: '10' },
+//     { label: '11', value: '11' },
+//     { label: '12', value: '12' },
+//   ]);
+
+//   const [open, setOpen] = useState(false);
+//   const [value, setValue] = useState(null);
 
 //   useEffect(() => {
 //     fetchData();
-//   }, [ fetchData]);
+//   }, [value]);
 
 //   const [selectedChart, setSelectedChart] = useState('sounding');
 //   const [soundingData, setSoundingData] = useState(null);
 //   const [rendemenData, setRendemenData] = useState(null);
 
-//   console.log("object:::",rendemenData)
-
 //   const fetchData = async () => {
 //     try {
-//       const soundingResponse = await axios.get('http://10.0.2.2:105/grafik_sounding');
+//       const soundingResponse = await axios.get(`http://10.0.2.2:5000/grafik_sounding`);
 //       setSoundingData(soundingResponse.data);
       
-//       const rendemenResponse = await axios.get('http://10.0.2.2:105/grafik_rendemen');
-//       setRendemenData(rendemenResponse.data);
+//       // Fetch data for rendemenData, adjust the URL accordingly
+
 //     } catch (error) {
 //       console.log('Error fetching data:', error);
 //     }
+//   };
+
+//   const handleValueChange = (itemValue) => {
+//     setValue(itemValue);
+//     setOpen(false);
 //   };
 
 //   const renderChart = () => {
@@ -102,7 +127,17 @@
 //     <>
 //       <Header name={user?.data[2]} />
 //       <View style={styles.wrapper}>
-//         <Text style={styles.text}>Grafik Sounding & Rendemen</Text>
+//         <Text style={styles.text}>Grafik Sounding dan Rendemen</Text>
+//         <DropDownPicker
+//           style={styles.picker}
+//           placeholder="Pilih Bulan"
+//           open={open}
+//           value={value}
+//           items={items}
+//           setOpen={setOpen}
+//           setValue={handleValueChange}
+//           setItems={setItems}
+//         />
 //         <View style={styles.buttonGroup}>
 //           <TouchableOpacity
 //             style={[styles.button, selectedChart === 'sounding' && styles.selectedButton]}
@@ -130,6 +165,9 @@
 //       >
 //         {renderChart()}
 //       </ScrollView>
+//       <View style={styles.buttonGroup}>
+
+//       </View>
 //       <NavBar activePage="GrafikH" />
 //     </>
 //   );
@@ -178,9 +216,17 @@
 //   selectedButtonText: {
 //     color: '#FFFFFF',
 //   },
+//   picker: {
+//     backgroundColor: '#E5E5E5',
+//     borderColor: '#E5E5E5',
+//     borderRadius: 10,
+//   },
 // });
 
 // export default GrafikH;
+
+
+
 
 
 import React, { useContext, useEffect, useState } from 'react';
@@ -193,15 +239,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from './AuthContext';
 
 const GrafikH = () => {
-  const { user } = useContext(AuthContext);
+  const {user} = useContext(AuthContext);
+
+  useEffect(() => {
+    fetchData();
+  }, [ fetchData]);
 
   const [selectedChart, setSelectedChart] = useState('sounding');
   const [soundingData, setSoundingData] = useState(null);
   const [rendemenData, setRendemenData] = useState(null);
 
-  useEffect(() => {
-    fetchData();
-  }, []); // Menghapus fetchData dari array dependency
+  // console.log("object:::",rendemenData)
 
   const fetchData = async () => {
     try {
@@ -285,7 +333,7 @@ const GrafikH = () => {
     <>
       <Header name={user?.data[2]} />
       <View style={styles.wrapper}>
-        <Text style={styles.text}>Grafik Sounding & Rendemen</Text>
+        <Text style={styles.text}>Grafik Sounding dan Rendemen</Text>
         <View style={styles.buttonGroup}>
           <TouchableOpacity
             style={[styles.button, selectedChart === 'sounding' && styles.selectedButton]}

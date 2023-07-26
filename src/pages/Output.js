@@ -1,20 +1,25 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import Header from '../components/Header';
 import CardCounter from '../components/CardCounter';
 import {useRoute} from '@react-navigation/native';
+import { AuthContext } from './AuthContext';
+
 
 const Output = () => {
   const route = useRoute();
   const {data} = route.params;
   console.log(data)
+
+  const {user} = useContext(AuthContext)
   
   return (
     <>
-      <Header />
+      <Header name={user?.data[2]} />
       <View style={styles.wrapper}>
         <Text style={styles.text}>Hasil Nilai Pengukuran</Text>
-        <CardCounter volume={data?.volume} suhu={data?.suhu} hasil={data?.hasil}data={data} />
+        <CardCounter 
+        volume={(data?.volume)} suhu={(data?.suhu)} hasil={(data?.hasil)}data={data}/>
       </View>
     </>
   );

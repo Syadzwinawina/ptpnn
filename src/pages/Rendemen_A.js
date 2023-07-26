@@ -55,12 +55,12 @@ const Rendemen_A = () => {
               <View key={index} style={styles.tableRow}>
                 <Text style={styles.tableCell}>{data.Waktu}</Text>
                 <Text style={styles.tableCell}>{data.Nama}</Text>
-                <Text style={styles.tableCell}>{data.Pengiriman}</Text>
+                <Text style={styles.tableCell}>{data['Pengiriman']}</Text>
                 <Text style={styles.tableCell}>{data['Stok Awal']}</Text>
                 <Text style={styles.tableCell}>{data['Jumlah Rebusan']}</Text>
                 <Text style={styles.tableCell}>{data['TBS Olah']}</Text>
                 <Text style={styles.tableCell}>{data['Hasil CPO']}</Text>
-                <Text style={styles.tableCell}>{data['Hasil Rendemen']}</Text>
+                <Text style={styles.tableCell}>{data['hasil']}</Text>
               </View>
             ))}
           </View>

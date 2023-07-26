@@ -4,9 +4,14 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Button from '../components/Button';
 import Gap from '../components/Gap';
 import MainHeader from '../components/MainHeader';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { Linking, Platform } from 'react-native';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import Share from 'react-native-share';
+import axios from 'axios';
 
 const DW_R = () => {
+
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -45,49 +50,162 @@ const DW_R = () => {
   };
 
   const downloadHasilRendemen = async (tanggal) => {
+        try {
+          const response = await fetch('http://10.0.2.2:105/download_hasil_rendemen', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ tanggal }),
+          });
+    
+          const data = await response.json();
+    
+          if (response.ok) {
+            Alert.alert('Berhasil', `File PDF '${data.message}' berhasil dihasilkan dan didownload`);
+          } else {
+            Alert.alert('Error', `Gagal mengunduh hasil rendemen: ${data.error}`);
+          }
+        } catch (error) {
+          console.log('Error downloading hasil rendemen:', error.message);
+          Alert.alert('Error', 'Terjadi kesalahan saat mengunduh hasil rendemen');
+        }
+      };
+    
+
+  const downloadPDF = async (tanggal) => {
     try {
-      const response = await fetch('http://10.0.2.2:105/download_hasil_rendemen', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ tanggal }),
-      });
+      const response = await axios.get(`http://10.0.2.2:105/get_data_by_date?tanggal=${tanggal}`);
+      const data = response.data; 
+      console.log("DATA TO LOAD::11111111", response?.data); // Mengakses data dari respons menggunakan response.data
+      
 
-      const data = await response.json();
+    if (response?.data?.error === "false") {
+     
+      const results = [data];
+      console.log("RESULT::",results)
 
-      if (response.ok) {
-        Alert.alert('Berhasil', `File PDF '${data.message}' berhasil dihasilkan dan didownload`);
-      } else {
-        Alert.alert('Error', `Gagal mengunduh hasil rendemen: ${data.error}`);
-      }
+      // Konversi data hasil rendemen ke format HTML untuk tabel
+      const htmlContent = `<!DOCTYPE html>
+        <html>
+        <head>
+        <style>
+          @page {
+            size: landscape;
+          }
+          table {
+            border-collapse: collapse;
+          }
+          th, td {
+            border: 1px solid black;
+            padding: 8px;
+          }
+          h1 {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+          }
+        </style>
+        </head>
+        <body>
+          <h1>DATA RENDEMEN</h1>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Waktu</th>
+                <th>Nama</th>
+                <th>Pengiriman</th>
+                <th>Stok Awal</th>
+                <th>Jumlah Rebusan</th>
+                <th>TBS Olah</th>
+                <th>Hasil CPO</th>
+                <th>Hasil Rendemen</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Data Loop -->
+              ${results?.map((item, index) => 
+                `
+                <tr>
+                  <td>${index +1 }</td>
+                  <td>${item?.waktu[0]}</td>
+                  <td>${item?.nama[0]}</td>
+                  <td>${item?.pengiriman[0]?.toString()}</td>
+                  <td>${item?.stok_awal[0]?.toString()}</td>
+                  <td>${item?.jumlah_rebusan[0]?.toString()}</td>
+                  <td>${item?.TBS_olah[0]?.toString()}</td>
+                  <td>${item?.hasil_cpo[0]?.toString()}</td>
+                  <td>${item?.hasil_rendemen[0]?.toString()}</td>
+                </tr>
+              `
+                )
+                .join('')}
+
+            </tbody>
+          </table>
+        </body>
+        </html>`;
+
+  
+      // Tentukan options untuk konversi HTML ke PDF
+      const options = {
+        html: htmlContent,
+        fileName: `hasil_rendemen_${tanggal}`,
+        directory: 'Documents',
+      };
+  
+      // Lakukan konversi HTML ke PDF
+      const file = await RNHTMLtoPDF.convert(options);
+  
+      // Tampilkan pesan sukses
+      Alert.alert('Berhasil', `File PDF 'hasil_rendemen_${tanggal}.pdf' berhasil dihasilkan.`);
+  
+      // Bagikan file PDF ke aplikasi lain
+      const shareOptions = {
+        title: `Hasil Rendemen ${tanggal}`,
+        url: `file://${file.filePath}`,
+        type: 'application/pdf',
+      };
+      Share.open(shareOptions);
+    } else {
+      Alert.alert('Error', `Gagal mengunduh hasil rendemen: ${data.error}`);
+    }
     } catch (error) {
-      console.log('Error downloading hasil rendemen:', error.message);
-      Alert.alert('Error', 'Terjadi kesalahan saat mengunduh hasil rendemen');
+      console.error('Error saat mengonversi dan menyimpan ke PDF:', error);
+      Alert.alert('Error', 'Terjadi kesalahan saat mengonversi dan menyimpan ke PDF');
     }
   };
+  
+
+  const handleDownloadPDF = async (date) => {
+     downloadPDF(date);
+  };
+  
 
   return (
     <>
-     <MainHeader label="Download Rendemen" onPress={() => navigation.goBack()} />
-    <View style={styles.container}>
-      <Text style={styles.title}>Download Hasil Rendemen</Text>
-      <Gap height={15} />
-      <View style={styles.datePickerWrapper}>
-        <Text style={styles.label}>Pilih Tanggal:</Text>
-        <Button label={formatDateString(selectedDate)} onPress={handleDateSelection} />
+      <MainHeader label="Download Rendemen" onPress={() => navigation.goBack()} />
+      <View style={styles.container}>
+        <Text style={styles.title}>Download Hasil Rendemen</Text>
+        <Gap height={15} />
+        <View style={styles.datePickerWrapper}>
+          <Text style={styles.label}>Pilih Tanggal:</Text>
+          <Button label={formatDateString(selectedDate)} onPress={handleDateSelection} />
+        </View>
+        {showDatePicker && (
+          <DateTimePicker
+            value={selectedDate}
+            mode="date"
+            display="default"
+            onChange={handleDateChange}
+          />
+        )}
+        {/* <Gap height={15} />
+        <Button label="Download" onPress={handleDownload} /> */}
+        <Gap height={15} />
+        <Button label="Download PDF" onPress={()=>handleDownloadPDF(formatDateString(selectedDate))} />
       </View>
-      {showDatePicker && (
-        <DateTimePicker
-          value={selectedDate}
-          mode="date"
-          display="default"
-          onChange={handleDateChange}
-        />
-      )}
-      <Gap height={15} />
-      <Button label="Download" onPress={handleDownload} />
-    </View>
     </>
   );
 };

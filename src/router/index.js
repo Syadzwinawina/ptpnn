@@ -23,8 +23,8 @@ import Tambah_CPO_A from '../pages/Tambah_CPO_A.js';
 import Edit_CPO from '../pages/Edit_CPO.js';
 import Edit_Akun from '../pages/Edit_Akun.js';
 import Download_R_A from '../pages/Download_R_A.js';
-import Download_R from '../pages/Download_R.js';
-import Download_S from '../pages/Download_S.js';
+
+
 import Hapus_R_A from '../pages/Hapus_R_A.js';
 import { AuthContext } from '../pages/AuthContext.js';
 import Riwayat_R from '../pages/Riwayat_R.js';
@@ -124,16 +124,7 @@ const Router = () => {
         component={Download_R_A}
         options={{headerShown: false}}
       />
-      <Stack.Screen
-        name="Download_R"
-        component={Download_R}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="Download_S"
-        component={Download_S}
-        options={{headerShown: false}}
-      />
+      
       <Stack.Screen
         name="Hapus_A"
         component={Hapus_A}

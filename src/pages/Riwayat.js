@@ -124,6 +124,12 @@ const Riwayat = () => {
     axios
       .get('http://10.0.2.2:105/tampilkan_data_sounding')
       .then((response) => {
+         // Mengurutkan data dari terbaru ke terlama berdasarkan waktu
+         const sortedData = response.data.data_sounding.sort((a, b) => {
+          const timeA = new Date(a.Waktu).getTime();
+          const timeB = new Date(b.Waktu).getTime();
+          return timeB - timeA;
+        });
         setTableData(response.data.data_sounding);
       })
       .catch((error) => {

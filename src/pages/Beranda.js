@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -16,7 +16,7 @@ export default function Beranda({ navigation }) {
   const [items, setItems] = useState([
     { label: 'Tangki CPO 1', value: 'cpo1' },
     { label: 'Tangki CPO 2', value: 'cpo2' },
-  ]);
+  ]);console.log(items)
 
 
   const handleCount = useCallback(async () => {
@@ -37,7 +37,7 @@ export default function Beranda({ navigation }) {
     } catch (error) {
       console.log(error);
     }
-  }, [beda, items, meja, navigation, suhu, tinggi, user]);
+  }, [beda, items, meja, navigation, suhu, tinggi, selectedValue, user]);
 
  const {user} = useContext(AuthContext)
 
@@ -45,62 +45,64 @@ export default function Beranda({ navigation }) {
     <>
       <Header name={user?.data[2]} />
       <Text style={styles.text}>Pemasukan Nilai Pengukuran</Text>
-      <View style={styles.container}>
-        <View style={styles.wrapper}>
-          <Input
-            label="Tinggi :"
-            height={30}
-            labelOn
-            onChangeText={(text) => setTinggi(text)}
-          />
-          <Gap height={15} />
-          <Input
-            label="Suhu :"
-            height={30}
-            labelOn
-            onChangeText={(text) => setSuhu(text)}
-          />
-          <Gap height={15} />
-          <Input
-            label="Beda :"
-            height={30}
-            labelOn
-            onChangeText={(text) => setBeda(text)}
-          />
-          <Gap height={15} />
-          <Input
-            label="Meja :"
-            height={30}
-            labelOn
-            onChangeText={(text) => setMeja(text)}
-          />
-          <Gap height={15} />
-          <Text style={styles.label}>Tangki :</Text>
-          <DropDownPicker
-          style={styles.picker}
-          placeholder="Pilih Tangki"
-          open={open}
-          value={selectedValue}
-          items={items}
-          setOpen={setOpen}
-          setValue={setSelectedValue}
-          setItems={setItems}
-          onValueChange={(value) => setSelectedValue(value)}
-/>
-          <Gap height={55} />
-          <Button label="Hitung" onPress={handleCount} />
-        </View>
-      </View>
+      {/* <View style={styles.container}> */}
+      <ScrollView style={styles.wrapper}>
+        {/* <ScrollView> */}
+
+
+  <Input
+    label="Tinggi :"
+    height={30}
+    labelOn
+    onChangeText={(text) => setTinggi(text)}
+  />
+  <Gap height={15} />
+  <Input
+    label="Suhu :"
+    height={30}
+    labelOn
+    onChangeText={(text) => setSuhu(text)}
+  />
+  <Gap height={15} />
+  <Input
+    label="Beda :"
+    // height={30}
+    labelOn
+    onChangeText={(text) => setBeda(text)}
+  />
+  <Gap height={15} />
+  <Input
+    label="Meja :"
+    // height={30}
+    labelOn
+    onChangeText={(text) => setMeja(text)}
+  />
+  <Gap height={15} />
+
+  <Text style={styles.label}>Tangki :</Text>
+  <DropDownPicker
+    style={styles.picker}
+    placeholder="Pilih Tangki"
+    open={open}
+    value={selectedValue}
+    items={items}
+    setOpen={setOpen}
+    setValue={setSelectedValue}
+    setItems={setItems}
+    onValueChange={(value) => setSelectedValue(value)}
+    />
+  <Gap height={35} />
+  <Button label="Hitung" onPress={handleCount} />
+    {/* </ScrollView> */}
+</ScrollView>
       <NavBar activePage="Beranda" />
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   wrapper: {
+    flex: 1,
     padding: 30,
   },
   text: {
@@ -111,6 +113,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   picker: {
+    zIndex:30,
     backgroundColor: '#E5E5E5',
     borderColor: '#E5E5E5',
     borderRadius: 10,
@@ -119,7 +122,9 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontSize: 12,
     lineHeight: 18,
+    // height: 80,
     color: 'black',
     fontWeight: 'bold',
   },
+
 });
